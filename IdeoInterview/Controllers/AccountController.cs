@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using IdeoInterview.Models;
+using IdeoInterview.ViewModels;
 
 namespace IdeoInterview.Controllers
 {
