@@ -13,6 +13,8 @@ namespace IdeoInterview
         public IdeoInterviewContext()
             : base("name=IdeoInterviewContext") { }
 
+        public virtual DbSet<UserProfile> UserProfile { get; set; }
+
         public static IdeoInterviewContext Create()
         {
             return new IdeoInterviewContext();
