@@ -6,9 +6,11 @@ using System.Web.Mvc;
 using IdeoInterview.ViewModels;
 using Microsoft.AspNet.Identity;
 using IdeoInterview.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace IdeoInterview.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IdeoInterviewContext _context;
@@ -29,17 +31,28 @@ namespace IdeoInterview.Controllers
             }
             else
             {
-                UserProfileViewModel model = new UserProfileViewModel();
+                UserProfileViewModel model = new UserProfileViewModel(userId);
                 return View(model);
             }
         }
 
+        [Authorize(Roles = "User")]
         [HttpPost]
         public ActionResult Index(UserProfileViewModel model)
         {
             var userId = User.Identity.GetUserId();
             var user = _context.Users.FirstOrDefault(x => x.Id == userId);
 
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_context));
+            if (model.Role == "Admin")
+            {
+                UserManager.AddToRole(userId, "Admin");           
+            }
+            else
+            {
+                UserManager.RemoveFromRole(userId, "Admin");
+            }            
+                   
             if (user.UserProfile != null)
             {
                 user.UserProfile.Role = model.Role;
@@ -49,7 +62,9 @@ namespace IdeoInterview.Controllers
                 user.UserProfile = new UserProfile { Id = model.Id, Role = model.Role };
             }
             _context.SaveChanges();
-            return View(model);
+
+            HttpContext.GetOwinContext().Authentication.SignOut();
+            return RedirectToAction("login", "account");
         }
     }
 }

@@ -1,17 +1,20 @@
 ﻿@model IdeoInterview.ViewModels.UserProfileViewModel
 
-@using (Html.BeginForm("index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal  col-s-5 col-md-11 col-lg-6", role = "form", style = " text-align: center;font-size:35px; " }))
-{
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="">
-        <div>Imię:</div>
-        <div>
-            @Html.TextBoxFor(m => m.RoleForDropDown, new { placeholder = "Tu wpisz imię", @class = "form-control", style = "float:none!important; display:inline-block; font-size:25px;" })
-        </div>
-        <div style="padding-bottom:50px; padding-top:20px;">
-            <div style=" padding-bottom:3px; padding-left:3px; padding-right:3px; padding-top:3px; display:inline-block; margin-bottom:10px;">
-                <button style="font-size:40px;" type="submit" value="Log in" class="btn btn-success">Zapisz</button>
+<div class="row">
+    @using (Html.BeginForm("index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal  col-s-5 col-md-11 col-lg-6", role = "form", style = " text-align: center;font-size:35px; " }))
+    {
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="">
+            <div>Twoja aktualna rola to: @Model.Role </div>
+            <div>
+                @Html.LabelFor(m => m.Role, "Zmień ją na:", new { @class = "control-label" })
+                @Html.DropDownListFor(m => m.Role, new SelectList(Model.RoleForDropDown))
+            </div>
+            <div style="padding-bottom:50px; padding-top:20px;">
+                <div style=" padding-bottom:3px; padding-left:3px; padding-right:3px; padding-top:3px; display:inline-block; margin-bottom:10px;">
+                    <button type="submit" value="Log in" class="btn btn-success">Zapisz</button>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
