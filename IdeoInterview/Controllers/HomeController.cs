@@ -7,6 +7,7 @@ using IdeoInterview.ViewModels;
 using Microsoft.AspNet.Identity;
 using IdeoInterview.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Newtonsoft.Json;
 
 namespace IdeoInterview.Controllers
 {
@@ -46,13 +47,13 @@ namespace IdeoInterview.Controllers
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_context));
             if (model.Role == "Admin")
             {
-                UserManager.AddToRole(userId, "Admin");           
+                UserManager.AddToRole(userId, "Admin");
             }
             else
             {
                 UserManager.RemoveFromRole(userId, "Admin");
-            }            
-                   
+            }
+
             if (user.UserProfile != null)
             {
                 user.UserProfile.Role = model.Role;
@@ -65,6 +66,27 @@ namespace IdeoInterview.Controllers
 
             HttpContext.GetOwinContext().Authentication.SignOut();
             return RedirectToAction("login", "account");
+        }
+
+        [HttpGet]
+        public ActionResult Tree()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult Nodes()
+        {
+            var nodes = new List<JsTreeModel>(_context.JsTreeModel);
+            return Json(nodes, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        public ActionResult GetLastNodeId()
+        {
+            var nodes = new List<JsTreeModel>(_context.JsTreeModel);
+            var lastId = nodes.Last().id;
+            return Json(lastId, JsonRequestBehavior.AllowGet);
         }
     }
 }

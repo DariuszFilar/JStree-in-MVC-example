@@ -12,6 +12,7 @@ namespace IdeoInterview.ViewModels
         public string Role { get; set; } = "User";
         public string[] RoleForDropDown => new string[] { "User", "Admin" };
         public string Id { get; set; }
+        public string LastIdOfNode { get; set; }
 
         public UserProfileViewModel()
         {

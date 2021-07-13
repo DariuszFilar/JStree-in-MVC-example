@@ -1,0 +1,59 @@
+﻿<div id="jstree"></div>
+<button id="btnCreate">create node</button>
+
+<input id="inputName" />
+
+<script>
+    $(function () {
+
+        var data = {
+            'url': '/Home/Nodes',
+            'data': function (node) {
+                return { 'id': node.id };
+            }
+        }
+
+        $("#jstree").jstree({
+            "core": {
+                "check_callback": true,
+                "data": data
+            }
+        });
+
+        $('#btnCreate').click(function () {
+            $.ajax({
+                type: "GET",
+                async: true,
+                url: "/Home/GetLastNodeId",
+                contentType: "application/json",
+                context: this,
+                success: function (lastId) {
+                    $('#jstree').jstree().create_node('#', {
+                        "id": lastId,
+                        "text": inputName.value
+                    }, "last")
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "/Home/GetLastNodeId",
+                contentType: "application/json",
+                context: this,
+                success: function (lastId) {
+                    $('#jstree').jstree().create_node('#', {
+                        "id": lastId,
+                        "text": inputName.value
+                    }, "last")
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+</script>

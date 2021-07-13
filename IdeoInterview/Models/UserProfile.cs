@@ -13,6 +13,6 @@ namespace IdeoInterview.Models
         [Key, ForeignKey("User")]
         public string Id { get; set; }
         public virtual ApplicationUser User { get; set; }
-        public string Role { get; set; } = "User";
+        public string Role { get; set; } = "User";        
     }
 }

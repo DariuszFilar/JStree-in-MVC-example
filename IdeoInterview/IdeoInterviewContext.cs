@@ -14,6 +14,7 @@ namespace IdeoInterview
             : base("name=IdeoInterviewContext") { }
 
         public virtual DbSet<UserProfile> UserProfile { get; set; }
+        public virtual DbSet<JsTreeModel> JsTreeModel { get; set; }
 
         public static IdeoInterviewContext Create()
         {
