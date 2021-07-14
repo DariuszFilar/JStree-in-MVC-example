@@ -174,13 +174,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IdeoInterviewContext.cs" />
-    <Compile Include="Migrations\202107121324155_AddedUserProfile.cs" />
-    <Compile Include="Migrations\202107121324155_AddedUserProfile.Designer.cs">
-      <DependentUpon>202107121324155_AddedUserProfile.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202107130912057_AddedJsTreeModel.cs" />
-    <Compile Include="Migrations\202107130912057_AddedJsTreeModel.Designer.cs">
-      <DependentUpon>202107130912057_AddedJsTreeModel.cs</DependentUpon>
+    <Compile Include="Migrations\202107141509378_InitMigration.cs" />
+    <Compile Include="Migrations\202107141509378_InitMigration.Designer.cs">
+      <DependentUpon>202107141509378_InitMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\JsTreeModel.cs" />
@@ -281,11 +277,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202107121324155_AddedUserProfile.resx">
-      <DependentUpon>202107121324155_AddedUserProfile.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202107130912057_AddedJsTreeModel.resx">
-      <DependentUpon>202107130912057_AddedJsTreeModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202107141509378_InitMigration.resx">
+      <DependentUpon>202107141509378_InitMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -76,17 +76,33 @@ namespace IdeoInterview.Controllers
         [HttpGet]
         public ActionResult Nodes()
         {
-            var nodes = new List<JsTreeModel>(_context.JsTreeModel);
-            return Json(nodes, JsonRequestBehavior.AllowGet);
+            var node = new List<JsTreeModel>(_context.JsTreeModel);
+            return Json(node, JsonRequestBehavior.AllowGet);
         }
 
 
         [HttpGet]
         public ActionResult GetLastNodeId()
         {
-            var nodes = new List<JsTreeModel>(_context.JsTreeModel);
-            var lastId = nodes.Last().id;
+            var node = new List<JsTreeModel>(_context.JsTreeModel);
+            var lastId = node.Last().id;
+
             return Json(lastId, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult AddNode(string name, string parent)
+        {
+            if (String.IsNullOrEmpty(parent))
+            {
+                parent = "#";
+            }
+            JsTreeModel test = new JsTreeModel { text = name, parent = parent };
+            _context.JsTreeModel.Add(test);
+
+
+            _context.SaveChanges();
+            return Json(JsonRequestBehavior.AllowGet);
         }
     }
 }

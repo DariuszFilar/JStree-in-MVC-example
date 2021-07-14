@@ -1,5 +1,7 @@
-﻿<div id="jstree"></div>
-<button id="btnCreate">create node</button>
+﻿<div class="row" style="padding-top: 50px" >
+    <div id="jstree"></div>
+    <button id="btnCreate">create node</button>
+</div>
 
 <input id="inputName" />
 
@@ -20,7 +22,16 @@
             }
         });
 
+        
+
         $('#btnCreate').click(function () {
+            var parent = null;
+            var temp = $("#jstree").jstree("get_selected")[0];
+
+            if (temp) {
+                parent = temp;
+            }
+
             $.ajax({
                 type: "GET",
                 async: true,
@@ -28,8 +39,8 @@
                 contentType: "application/json",
                 context: this,
                 success: function (lastId) {
-                    $('#jstree').jstree().create_node('#', {
-                        "id": lastId,
+                    $('#jstree').jstree().create_node(parent, {
+                        "id": ++lastId,
                         "text": inputName.value
                     }, "last")
                 },
@@ -37,22 +48,12 @@
                     console.log(error);
                 }
             });
+            var name = $("#inputName").val();            
             $.ajax({
                 type: "POST",
-                async: true,
-                url: "/Home/GetLastNodeId",
-                contentType: "application/json",
-                context: this,
-                success: function (lastId) {
-                    $('#jstree').jstree().create_node('#', {
-                        "id": lastId,
-                        "text": inputName.value
-                    }, "last")
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+                url: "/Home/AddNode",
+                data: { "name": name, "parent" : parent},
+            })
         });
     });
 

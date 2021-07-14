@@ -3,10 +3,27 @@ namespace IdeoInterview.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddedUserProfile : DbMigration
+    public partial class InitMigration : DbMigration
     {
         public override void Up()
         {
+            CreateTable(
+                "dbo.JsTreeModels",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        parent = c.String(),
+                        text = c.String(),
+                        icon = c.String(),
+                        state = c.String(),
+                        opened = c.Boolean(nullable: false),
+                        disabled = c.Boolean(nullable: false),
+                        selected = c.Boolean(nullable: false),
+                        li_attr = c.String(),
+                        a_attr = c.String(),
+                    })
+                .PrimaryKey(t => t.id);
+            
             CreateTable(
                 "dbo.AspNetRoles",
                 c => new
@@ -108,6 +125,7 @@ namespace IdeoInterview.Migrations
             DropTable("dbo.UserProfiles");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.JsTreeModels");
         }
     }
 }
