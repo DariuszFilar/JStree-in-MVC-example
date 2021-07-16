@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace IdeoInterview.Controllers
 {
-    [Authorize]
+    //[Authorize] //TODO: Włączyć
     public class HomeController : Controller
     {
         private IdeoInterviewContext _context;
@@ -37,7 +37,7 @@ namespace IdeoInterview.Controllers
             }
         }
 
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")] //TODO: Włączyć
         [HttpPost]
         public ActionResult Index(UserProfileViewModel model)
         {
@@ -102,6 +102,19 @@ namespace IdeoInterview.Controllers
 
 
             _context.SaveChanges();
+            return Json(JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteNode(int[] ids)
+        {
+            foreach( var id in ids)
+            {
+               var idToRemove = _context.JsTreeModel.FirstOrDefault(x => x.id == id);
+                _context.JsTreeModel.Remove(idToRemove);
+            }
+            _context.SaveChanges();
+
             return Json(JsonRequestBehavior.AllowGet);
         }
     }

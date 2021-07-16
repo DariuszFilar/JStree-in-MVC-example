@@ -1,20 +1,19 @@
-﻿<div class="row" style="padding-top: 50px" >
+﻿<div class="row" style="padding-top: 50px">
     <div id="jstree"></div>
     <button id="btnCreate">create node</button>
 </div>
 
-<input id="inputName" />
+<input id="inputName" placeholder="Nazwa nowego folderu">
+<button id="delateNode">Usuń</button>
 
 <script>
     $(function () {
-
         var data = {
             'url': '/Home/Nodes',
             'data': function (node) {
                 return { 'id': node.id };
             }
         }
-
         $("#jstree").jstree({
             "core": {
                 "check_callback": true,
@@ -22,7 +21,50 @@
             }
         });
 
-        
+        var idsToRemove = [];
+
+        function sendDeleteRequest() {
+            idsToRemove.forEach((id) => $("#jstree").jstree().delete_node(id));
+            $.ajax({
+                type: "POST",
+                url: "/Home/DeleteNode",
+                data: { "ids": idsToRemove },
+            });
+
+            idsToRemove = [];
+            return;
+        }
+
+        function recursivelyRemoveChildren(jsTree, childId) {
+            var node = jsTree.get_node(childId);
+
+            if (node.children.length) {
+                node.children.forEach((grandChildId) => recursivelyRemoveChildren(jsTree, grandChildId));
+            }
+
+            idsToRemove.push(childId);
+            return console.log(`Dodaje ID ${childId} do usuniecia`);
+        }
+
+        $("#delateNode").click(function () {
+            var jsTree = $("#jstree").jstree();
+            var nodeToDelete = (jsTree.get_selected(true))[0];
+
+            if (!nodeToDelete) {
+                return;
+            }
+
+            idsToRemove.push(nodeToDelete.id);
+
+            if (!nodeToDelete.children.length) {
+                sendDeleteRequest();            
+                return;
+            }
+            
+            nodeToDelete.children.forEach((child) => recursivelyRemoveChildren(jsTree, child));
+            
+            sendDeleteRequest();            
+        });
 
         $('#btnCreate').click(function () {
             var parent = null;
@@ -48,13 +90,13 @@
                     console.log(error);
                 }
             });
-            var name = $("#inputName").val();            
+            var name = $("#inputName").val();
             $.ajax({
                 type: "POST",
                 url: "/Home/AddNode",
-                data: { "name": name, "parent" : parent},
+                data: { "name": name, "parent": parent },
             })
-        });
+        });       
     });
 
 </script>
