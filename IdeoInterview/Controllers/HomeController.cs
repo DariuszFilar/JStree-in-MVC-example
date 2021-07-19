@@ -147,5 +147,18 @@ namespace IdeoInterview.Controllers
             }
             return Json(JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult MoveNode(int id, string parentId)
+        {
+            var nodeToChange = _context.JsTreeModel.SingleOrDefault(x => x.id == id);
+            if (nodeToChange != null)
+            {
+                nodeToChange.parent = parentId;
+                _context.SaveChanges();
+            }
+
+            return Json(JsonRequestBehavior.AllowGet);
+        }
     }
 }

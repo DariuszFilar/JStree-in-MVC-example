@@ -14,13 +14,17 @@
 </div>
 
 <script>
-    
-   
+
+
     $(function () {
-        $(document).bind("dnd_start.vakata", function (e, data) {
-            $("#jstree").jstree("#jstree").bind("move_node.jstree", function (e, data) {
-                console.log("Drop node " + data.node.id + " to " + data.parent);
-            });
+
+        $("#jstree").jstree("#jstree").bind("move_node.jstree", function (e, data) {
+            console.log("Drop node " + data.node.id + " to " + data.parent);
+            $.ajax({
+                type: "GET",
+                url: "/Home/MoveNode",
+                data: { "id": data.node.id, "parentId": data.parent },
+            })
         })
 
         var data = {
