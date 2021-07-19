@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace IdeoInterview.Controllers
 {
-    [Authorize] 
+    [Authorize]
     public class HomeController : Controller
     {
         private IdeoInterviewContext _context;
@@ -92,7 +92,7 @@ namespace IdeoInterview.Controllers
             {
                 lastId = node.Last().id;
             }
-            
+
             return Json(lastId, JsonRequestBehavior.AllowGet);
         }
 
@@ -103,10 +103,14 @@ namespace IdeoInterview.Controllers
             {
                 parent = "#";
             }
-            JsTreeModel test = new JsTreeModel { text = name, parent = parent, type = type };
-            _context.JsTreeModel.Add(test);
 
+            var parentNode = _context.JsTreeModel.FirstOrDefault(x => x.id.ToString() == parent);
+            if (parentNode?.type != "file")
+            {
+                JsTreeModel test = new JsTreeModel { text = name, parent = parent, type = type };
+                _context.JsTreeModel.Add(test);
 
+            }
             _context.SaveChanges();
             return Json(JsonRequestBehavior.AllowGet);
         }
@@ -117,9 +121,13 @@ namespace IdeoInterview.Controllers
             {
                 parent = "#";
             }
-            JsTreeModel test = new JsTreeModel { text = name, parent = parent, type = type };
-            _context.JsTreeModel.Add(test);
 
+            var parentNode = _context.JsTreeModel.FirstOrDefault(x => x.id.ToString() == parent);
+            if (parentNode?.type == "default")
+            {
+                JsTreeModel newForm = new JsTreeModel { text = name, parent = parent, type = type };
+                _context.JsTreeModel.Add(newForm);
+            }
 
             _context.SaveChanges();
             return Json(JsonRequestBehavior.AllowGet);

@@ -2,7 +2,7 @@
     <div id="jstree"></div>
 </div>
 <div style="padding-top: 55px">
-    <button class="btn btn-primary"id="btnCreateFolder">Stwórz nowy folder</button>
+    <button class="btn btn-primary" id="btnCreateFolder">Stwórz nowy folder</button>
     <input id="inputFolderName" placeholder="Nazwa nowego folderu">
 </div>
 <div>
@@ -14,7 +14,15 @@
 </div>
 
 <script>
+    
+   
     $(function () {
+        $(document).bind("dnd_start.vakata", function (e, data) {
+            $("#jstree").jstree("#jstree").bind("move_node.jstree", function (e, data) {
+                console.log("Drop node " + data.node.id + " to " + data.parent);
+            });
+        })
+
         var data = {
             'url': '/Home/Nodes',
             'data': function (node) {
@@ -89,6 +97,7 @@
             var parent = null;
             var temp = $("#jstree").jstree("get_selected")[0];
 
+            var tempLastId = 0
             if (temp) {
                 parent = temp;
             }
@@ -100,29 +109,37 @@
                 contentType: "application/json",
                 context: this,
                 success: function (lastId) {
+                    tempLastId = lastId;
                     $('#jstree').jstree().create_node(parent, {
                         "id": ++lastId,
                         "text": inputFolderName.value, "type": "default"
                     }, "last")
-                    if (lastId-1 == 0)
+                    if (lastId == 1) {
                         $("#jstree").jstree().refresh();
+                    }
                 },
                 error: function (error) {
                     console.log(error);
                 }
-            });
-            var name = $("#inputFolderName").val();
-            $.ajax({
-                type: "POST",
-                url: "/Home/AddFolder",
-                data: { "name": name, "parent": parent, "type": "default" },
             })
+                .then(() => {
+                    var name = $("#inputFolderName").val();
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/AddFolder",
+                        data: { "name": name, "parent": parent, "type": "default" },
+                    })
+                    if (tempLastId == 0) {
+                        $("#jstree").jstree().refresh();
+                    }
+                });
         });
 
         $('#btnCreateForm').click(function () {
             var parent = null;
             var temp = $("#jstree").jstree("get_selected")[0];
 
+            var tempLastId = 0;
             if (temp) {
                 parent = temp;
             }
@@ -134,21 +151,29 @@
                 contentType: "application/json",
                 context: this,
                 success: function (lastId) {
-                    $('#jstree').jstree().create_node(parent, {
-                        "id": ++lastId,
-                        "text": inputFormName.value, "type": "file"
-                    }, "last")                    
+                    if (lastId == 0 || !temp) {
+                    }
+                    else {
+                        tempLastId = lastId;
+                        $('#jstree').jstree().create_node(parent, {
+                            "id": ++lastId,
+                            "text": inputFormName.value, "type": "file"
+                        }, "last")
+                    };
                 },
                 error: function (error) {
-                    console.log(error);
-                }
-            });
-            var name = $("#inputFormName").val();
-            $.ajax({
-                type: "POST",
-                url: "/Home/AddFolder",
-                data: { "name": name, "parent": parent, "type": "file" },
+                },
             })
+                .then(() => {
+                    var name = $("#inputFormName").val();
+                    if (tempLastId != 1) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Home/AddForm",
+                            data: { "name": name, "parent": parent, "type": "file" },
+                        })
+                    }
+                });
         });
     });
 
