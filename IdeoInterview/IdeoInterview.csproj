@@ -178,6 +178,10 @@
     <Compile Include="Migrations\202107141509378_InitMigration.Designer.cs">
       <DependentUpon>202107141509378_InitMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202107181604159_AddedTypeInJstModel.cs" />
+    <Compile Include="Migrations\202107181604159_AddedTypeInJstModel.Designer.cs">
+      <DependentUpon>202107181604159_AddedTypeInJstModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\JsTreeModel.cs" />
     <Compile Include="Models\UserProfile.cs" />
@@ -279,6 +283,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202107141509378_InitMigration.resx">
       <DependentUpon>202107141509378_InitMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107181604159_AddedTypeInJstModel.resx">
+      <DependentUpon>202107181604159_AddedTypeInJstModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

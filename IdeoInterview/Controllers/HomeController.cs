@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace IdeoInterview.Controllers
 {
-    //[Authorize] //TODO: Włączyć
+    [Authorize] 
     public class HomeController : Controller
     {
         private IdeoInterviewContext _context;
@@ -37,7 +37,7 @@ namespace IdeoInterview.Controllers
             }
         }
 
-        //[Authorize(Roles = "User")] //TODO: Włączyć
+        [Authorize(Roles = "User")]
         [HttpPost]
         public ActionResult Index(UserProfileViewModel model)
         {
@@ -84,20 +84,40 @@ namespace IdeoInterview.Controllers
         [HttpGet]
         public ActionResult GetLastNodeId()
         {
+            int lastId = 0;
             var node = new List<JsTreeModel>(_context.JsTreeModel);
-            var lastId = node.Last().id;
 
+            var test = node.Where(x => x.id == 0).Count();
+            if (node.Count() > 0)
+            {
+                lastId = node.Last().id;
+            }
+            
             return Json(lastId, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public JsonResult AddNode(string name, string parent)
+        public JsonResult AddFolder(string name, string parent, string type)
         {
             if (String.IsNullOrEmpty(parent))
             {
                 parent = "#";
             }
-            JsTreeModel test = new JsTreeModel { text = name, parent = parent };
+            JsTreeModel test = new JsTreeModel { text = name, parent = parent, type = type };
+            _context.JsTreeModel.Add(test);
+
+
+            _context.SaveChanges();
+            return Json(JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult AddForm(string name, string parent, string type)
+        {
+            if (String.IsNullOrEmpty(parent))
+            {
+                parent = "#";
+            }
+            JsTreeModel test = new JsTreeModel { text = name, parent = parent, type = type };
             _context.JsTreeModel.Add(test);
 
 
@@ -108,13 +128,15 @@ namespace IdeoInterview.Controllers
         [HttpPost]
         public JsonResult DeleteNode(int[] ids)
         {
-            foreach( var id in ids)
+            if (!ids.Contains(0))
             {
-               var idToRemove = _context.JsTreeModel.FirstOrDefault(x => x.id == id);
-                _context.JsTreeModel.Remove(idToRemove);
+                foreach (var id in ids)
+                {
+                    var idToRemove = _context.JsTreeModel.FirstOrDefault(x => x.id == id);
+                    _context.JsTreeModel.Remove(idToRemove);
+                }
+                _context.SaveChanges();
             }
-            _context.SaveChanges();
-
             return Json(JsonRequestBehavior.AllowGet);
         }
     }

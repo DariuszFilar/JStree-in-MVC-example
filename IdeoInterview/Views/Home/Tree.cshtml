@@ -1,10 +1,17 @@
 ﻿<div class="row" style="padding-top: 50px">
     <div id="jstree"></div>
-    <button id="btnCreate">create node</button>
 </div>
-
-<input id="inputName" placeholder="Nazwa nowego folderu">
-<button id="delateNode">Usuń</button>
+<div style="padding-top: 55px">
+    <button class="btn btn-primary"id="btnCreateFolder">Stwórz nowy folder</button>
+    <input id="inputFolderName" placeholder="Nazwa nowego folderu">
+</div>
+<div>
+    <button class="btn btn-primary" id="btnCreateForm">Stwórz nowy formularz</button>
+    <input id="inputFormName" placeholder="Nazwa nowego formularzu">
+</div>
+<div>
+    <button class="btn btn-danger" id="delateNode">Usuń</button>
+</div>
 
 <script>
     $(function () {
@@ -18,7 +25,19 @@
             "core": {
                 "check_callback": true,
                 "data": data
-            }
+            }, "types": {
+                "default": {
+                    "valid_children": ["default", "file"]
+                },
+                "file": {
+                    "icon": "glyphicon glyphicon-file",
+                    "valid_children": []
+                }
+            },
+            "plugins": [
+                "contextmenu", "dnd", "search",
+                "state", "types", "wholerow"
+            ]
         });
 
         var idsToRemove = [];
@@ -57,16 +76,16 @@
             idsToRemove.push(nodeToDelete.id);
 
             if (!nodeToDelete.children.length) {
-                sendDeleteRequest();            
+                sendDeleteRequest();
                 return;
             }
-            
+
             nodeToDelete.children.forEach((child) => recursivelyRemoveChildren(jsTree, child));
-            
-            sendDeleteRequest();            
+
+            sendDeleteRequest();
         });
 
-        $('#btnCreate').click(function () {
+        $('#btnCreateFolder').click(function () {
             var parent = null;
             var temp = $("#jstree").jstree("get_selected")[0];
 
@@ -83,20 +102,54 @@
                 success: function (lastId) {
                     $('#jstree').jstree().create_node(parent, {
                         "id": ++lastId,
-                        "text": inputName.value
+                        "text": inputFolderName.value, "type": "default"
                     }, "last")
+                    if (lastId-1 == 0)
+                        $("#jstree").jstree().refresh();
                 },
                 error: function (error) {
                     console.log(error);
                 }
             });
-            var name = $("#inputName").val();
+            var name = $("#inputFolderName").val();
             $.ajax({
                 type: "POST",
-                url: "/Home/AddNode",
-                data: { "name": name, "parent": parent },
+                url: "/Home/AddFolder",
+                data: { "name": name, "parent": parent, "type": "default" },
             })
-        });       
+        });
+
+        $('#btnCreateForm').click(function () {
+            var parent = null;
+            var temp = $("#jstree").jstree("get_selected")[0];
+
+            if (temp) {
+                parent = temp;
+            }
+
+            $.ajax({
+                type: "GET",
+                async: true,
+                url: "/Home/GetLastNodeId",
+                contentType: "application/json",
+                context: this,
+                success: function (lastId) {
+                    $('#jstree').jstree().create_node(parent, {
+                        "id": ++lastId,
+                        "text": inputFormName.value, "type": "file"
+                    }, "last")                    
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            var name = $("#inputFormName").val();
+            $.ajax({
+                type: "POST",
+                url: "/Home/AddFolder",
+                data: { "name": name, "parent": parent, "type": "file" },
+            })
+        });
     });
 
 </script>
