@@ -19,7 +19,6 @@
     $(function () {
 
         $("#jstree").jstree("#jstree").bind("move_node.jstree", function (e, data) {
-            console.log("Drop node " + data.node.id + " to " + data.parent);
             $.ajax({
                 type: "GET",
                 url: "/Home/MoveNode",
@@ -124,7 +123,7 @@
                 },
                 error: function (error) {
                     console.log(error);
-                }
+                }                
             })
                 .then(() => {
                     var name = $("#inputFolderName").val();
@@ -133,7 +132,7 @@
                         url: "/Home/AddFolder",
                         data: { "name": name, "parent": parent, "type": "default" },
                     })
-                    if (tempLastId == 0) {
+                    if (tempLastId == 0 || tempLastId == 1) {
                         $("#jstree").jstree().refresh();
                     }
                 });
@@ -142,7 +141,7 @@
         $('#btnCreateForm').click(function () {
             var parent = null;
             var temp = $("#jstree").jstree("get_selected")[0];
-
+             
             var tempLastId = 0;
             if (temp) {
                 parent = temp;
