@@ -1,7 +1,7 @@
 ﻿@model IdeoInterview.ViewModels.UserProfileViewModel
 
 <div class="row">
-    @using (Html.BeginForm("index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal  col-s-5 col-md-11 col-lg-6", role = "form", style = " text-align: center;font-size:35px; " }))
+    @using (Html.BeginForm("index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal  col-s-5 col-md-11 col-lg-6", role = "form", style = " text-align: center;font-size:25px; padding-top: 20px" }))
     {
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="">
@@ -17,7 +17,4 @@
             </div>
         </div>
     }
-</div>
-<div id="jstree_demo">
- 
 </div>

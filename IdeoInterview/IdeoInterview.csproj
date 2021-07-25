@@ -45,10 +45,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Json.Net, Version=1.0.33.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Json.Net.1.0.33\lib\netstandard2.0\Json.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -174,15 +178,20 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IdeoInterviewContext.cs" />
-    <Compile Include="Migrations\202107141509378_InitMigration.cs" />
-    <Compile Include="Migrations\202107141509378_InitMigration.Designer.cs">
-      <DependentUpon>202107141509378_InitMigration.cs</DependentUpon>
+    <Compile Include="Migrations\202107201322030_InitMig.cs" />
+    <Compile Include="Migrations\202107201322030_InitMig.Designer.cs">
+      <DependentUpon>202107201322030_InitMig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202107181604159_AddedTypeInJstModel.cs" />
-    <Compile Include="Migrations\202107181604159_AddedTypeInJstModel.Designer.cs">
-      <DependentUpon>202107181604159_AddedTypeInJstModel.cs</DependentUpon>
+    <Compile Include="Migrations\202107201328340_ChangeTest.cs" />
+    <Compile Include="Migrations\202107201328340_ChangeTest.Designer.cs">
+      <DependentUpon>202107201328340_ChangeTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107201347091_ADDTITLE.cs" />
+    <Compile Include="Migrations\202107201347091_ADDTITLE.Designer.cs">
+      <DependentUpon>202107201347091_ADDTITLE.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Form.cs" />
     <Compile Include="Models\JsTreeModel.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -196,6 +205,7 @@
     <Compile Include="ViewModels\FactorViewModel.cs" />
     <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\ForgotViewModel.cs" />
+    <Compile Include="ViewModels\FormViewModel.cs" />
     <Compile Include="ViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\JsTreeViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -263,6 +273,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\Tree.cshtml" />
+    <Content Include="Views\Home\EditForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -281,11 +292,14 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202107141509378_InitMigration.resx">
-      <DependentUpon>202107141509378_InitMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202107201322030_InitMig.resx">
+      <DependentUpon>202107201322030_InitMig.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202107181604159_AddedTypeInJstModel.resx">
-      <DependentUpon>202107181604159_AddedTypeInJstModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202107201328340_ChangeTest.resx">
+      <DependentUpon>202107201328340_ChangeTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107201347091_ADDTITLE.resx">
+      <DependentUpon>202107201347091_ADDTITLE.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

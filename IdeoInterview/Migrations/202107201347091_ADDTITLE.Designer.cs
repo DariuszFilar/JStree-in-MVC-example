@@ -7,13 +7,13 @@ namespace IdeoInterview.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AddedTypeInJstModel : IMigrationMetadata
+    public sealed partial class ADDTITLE : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddedTypeInJstModel));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ADDTITLE));
         
         string IMigrationMetadata.Id
         {
-            get { return "202107181604159_AddedTypeInJstModel"; }
+            get { return "202107201347091_ADDTITLE"; }
         }
         
         string IMigrationMetadata.Source

@@ -127,6 +127,8 @@ namespace IdeoInterview.Controllers
             {
                 JsTreeModel newForm = new JsTreeModel { text = name, parent = parent, type = type };
                 _context.JsTreeModel.Add(newForm);
+                Form form = new Form { Title = name };
+                _context.Form.Add(form);
             }
 
             _context.SaveChanges();
@@ -141,7 +143,14 @@ namespace IdeoInterview.Controllers
                 foreach (var id in ids)
                 {
                     var idToRemove = _context.JsTreeModel.FirstOrDefault(x => x.id == id);
+
+                    if (_context?.Form.Where(x=>x.id == id).Count() > 0)
+                    {
+                        _context.Form.Remove(_context.Form.FirstOrDefault(x => x.id == id));
+                    }
+
                     _context.JsTreeModel.Remove(idToRemove);
+
                 }
                 _context.SaveChanges();
             }
@@ -159,6 +168,44 @@ namespace IdeoInterview.Controllers
             }
 
             return Json(JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetTypeOfNode()
+        {
+            List<string> ids = new List<string>();
+            List<JsTreeModel> listOfRoleId = new List<JsTreeModel>(_context.JsTreeModel.Where(x => x.type == "file"));
+            foreach (var list in listOfRoleId)
+            {
+                ids.Add(list.id.ToString());
+            }
+
+            return Json(ids.ToArray(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult EditForm(int FormId)
+        {
+            var node = _context.Form.FirstOrDefault(x => x.id == FormId);
+            FormViewModel model = new FormViewModel(node);
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public ActionResult EditForm(FormViewModel model)
+        {
+            var node = _context.Form.FirstOrDefault(x => x.id == model.id);
+            node.Title = model.Title;
+            node.Question = model.Question;
+            node.Answer = model.Answer;
+
+            var folder = _context.JsTreeModel.FirstOrDefault(x => x.id == model.id);
+            folder.text = model.Title;
+
+            _context.SaveChanges();
+            return View();
         }
     }
 }

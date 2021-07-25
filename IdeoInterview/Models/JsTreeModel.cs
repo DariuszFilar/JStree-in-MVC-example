@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 
 namespace IdeoInterview.Models
@@ -19,5 +22,6 @@ namespace IdeoInterview.Models
         public string li_attr { get; set; }
         public string a_attr { get; set; }
         public string type { get; set; }
+
     }
 }

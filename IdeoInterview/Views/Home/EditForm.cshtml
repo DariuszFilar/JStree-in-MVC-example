@@ -1,0 +1,34 @@
+﻿@model IdeoInterview.ViewModels.FormViewModel
+
+@using (Html.BeginForm("EditForm", "Home", null, FormMethod.Post, new { @class = "form-horizontal ", role = "form", style = " text-align: center;font-size:25px; padding-top:20px" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="">
+    <div>Tutaj wpisz tytuł:</div>
+    <div>
+        @Html.TextBoxFor(m => m.Title, new { placeholder = "tytuł", @class = "form-control", style = "float:none!important; display:inline-block;" })
+    </div>
+    <div>Tutaj wpisz pytanie:</div>
+    <div>
+        @Html.TextBoxFor(m => m.Question, new { placeholder = "pytanie", @class = "form-control", style = "float:none!important; display:inline-block;" })
+    </div>
+    <div>Tutaj wpisz odpowiedź</div>
+    <div>
+        @Html.TextBoxFor(m => m.Answer, new { placeholder = "odpowiedź", @class = "form-control", style = "float:none!important; display:inline-block;" })
+        @Html.HiddenFor(m => m.id)
+    </div>
+    <div style="padding-bottom:50px; padding-top:20px;">
+        <div style=" padding-bottom:3px; padding-left:3px; padding-right:3px; padding-top:3px; display:inline-block; margin-bottom:10px;">
+            <button style="font-size:25px;" type="submit" class="btn btn-success" id="submit">Zapisz</button>
+        </div>
+    </div>
+</div>
+}
+
+<script>
+    $(function () {
+        $("#submit").click(function () {
+            alert("zmiana została zapisana");
+        });
+    });
+</script>

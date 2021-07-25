@@ -7,13 +7,13 @@ namespace IdeoInterview.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class InitMigration : IMigrationMetadata
+    public sealed partial class InitMig : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitMig));
         
         string IMigrationMetadata.Id
         {
-            get { return "202107141509378_InitMigration"; }
+            get { return "202107201322030_InitMig"; }
         }
         
         string IMigrationMetadata.Source

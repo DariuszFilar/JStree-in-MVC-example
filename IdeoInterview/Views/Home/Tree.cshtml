@@ -1,15 +1,18 @@
-﻿<div class="row" style="padding-top: 50px">
+﻿@model IdeoInterview.ViewModels.FormViewModel
+
+<div class="row" style="padding-top: 20px">
     <div id="jstree"></div>
 </div>
-<div style="padding-top: 55px">
+<div style="padding-top: 5px">
     <button class="btn btn-primary" id="btnCreateFolder">Stwórz nowy folder</button>
     <input id="inputFolderName" placeholder="Nazwa nowego folderu">
 </div>
-<div>
+<div style="padding-top: 5px">
     <button class="btn btn-primary" id="btnCreateForm">Stwórz nowy formularz</button>
     <input id="inputFormName" placeholder="Nazwa nowego formularzu">
 </div>
-<div>
+<div style="padding-top: 5px">
+    <button class="btn btn-primary" id="editNode">Edytuj</button>
     <button class="btn btn-danger" id="delateNode">Usuń</button>
 </div>
 
@@ -29,7 +32,8 @@
         var data = {
             'url': '/Home/Nodes',
             'data': function (node) {
-                return { 'id': node.id };
+                return { 'id': node.id }
+                debugger;
             }
         }
         $("#jstree").jstree({
@@ -46,8 +50,8 @@
                 }
             },
             "plugins": [
-                "contextmenu", "dnd", "search",
-                "state", "types", "wholerow"
+                "dnd", "state", "types",
+                "wholerow"
             ]
         });
 
@@ -96,6 +100,7 @@
             sendDeleteRequest();
         });
 
+
         $('#btnCreateFolder').click(function () {
             var parent = null;
             var temp = $("#jstree").jstree("get_selected")[0];
@@ -123,7 +128,7 @@
                 },
                 error: function (error) {
                     console.log(error);
-                }                
+                }
             })
                 .then(() => {
                     var name = $("#inputFolderName").val();
@@ -138,10 +143,28 @@
                 });
         });
 
+        $('#editNode').click(function () {
+            var selectedNode = $("#jstree").jstree("get_selected")[0];
+
+            $.ajax({
+                type: "GET",
+                async: true,
+                url: "/Home/GetTypeOfNode",
+                contentType: "application/json",
+                context: this,
+                success: function (ids) {
+                    if (ids.includes(selectedNode)) {
+                        var url = '@Url.Action("EditForm", "Home", new { formId = "id" })'.replace('id', selectedNode);
+                        window.location.href = url;
+                    }
+                },
+            });
+        });
+
         $('#btnCreateForm').click(function () {
             var parent = null;
             var temp = $("#jstree").jstree("get_selected")[0];
-             
+
             var tempLastId = 0;
             if (temp) {
                 parent = temp;

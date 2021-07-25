@@ -3,10 +3,23 @@ namespace IdeoInterview.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitMigration : DbMigration
+    public partial class InitMig : DbMigration
     {
         public override void Up()
         {
+            CreateTable(
+                "dbo.Forms",
+                c => new
+                    {
+                        id = c.Int(nullable: false),
+                        Formid = c.String(),
+                        Question = c.String(),
+                        Answer = c.String(),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.JsTreeModels", t => t.id)
+                .Index(t => t.id);
+            
             CreateTable(
                 "dbo.JsTreeModels",
                 c => new
@@ -21,6 +34,7 @@ namespace IdeoInterview.Migrations
                         selected = c.Boolean(nullable: false),
                         li_attr = c.String(),
                         a_attr = c.String(),
+                        type = c.String(),
                     })
                 .PrimaryKey(t => t.id);
             
@@ -112,6 +126,7 @@ namespace IdeoInterview.Migrations
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.Forms", "id", "dbo.JsTreeModels");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
@@ -119,6 +134,7 @@ namespace IdeoInterview.Migrations
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.Forms", new[] { "id" });
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
@@ -126,6 +142,7 @@ namespace IdeoInterview.Migrations
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.JsTreeModels");
+            DropTable("dbo.Forms");
         }
     }
 }

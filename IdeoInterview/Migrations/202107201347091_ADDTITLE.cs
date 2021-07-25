@@ -3,16 +3,16 @@ namespace IdeoInterview.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddedTypeInJstModel : DbMigration
+    public partial class ADDTITLE : DbMigration
     {
         public override void Up()
         {
-            AddColumn("dbo.JsTreeModels", "type", c => c.String());
+            AddColumn("dbo.Forms", "Title", c => c.String());
         }
         
         public override void Down()
         {
-            DropColumn("dbo.JsTreeModels", "type");
+            DropColumn("dbo.Forms", "Title");
         }
     }
 }

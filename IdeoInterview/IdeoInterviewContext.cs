@@ -15,7 +15,7 @@ namespace IdeoInterview
 
         public virtual DbSet<UserProfile> UserProfile { get; set; }
         public virtual DbSet<JsTreeModel> JsTreeModel { get; set; }
-
+        public virtual DbSet<Form> Form { get; set; }
         public static IdeoInterviewContext Create()
         {
             return new IdeoInterviewContext();
