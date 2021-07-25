@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace IdeoInterview.Controllers
 {
-    [Authorize]
+    
     public class HomeController : Controller
     {
         private IdeoInterviewContext _context;
@@ -19,6 +19,8 @@ namespace IdeoInterview.Controllers
         {
             _context = new IdeoInterviewContext();
         }
+
+        [Authorize(Roles = "User")]
         public ActionResult Index()
         {
             var userId = User.Identity.GetUserId();
@@ -37,7 +39,7 @@ namespace IdeoInterview.Controllers
             }
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Admin,User")]
         [HttpPost]
         public ActionResult Index(UserProfileViewModel model)
         {
@@ -67,12 +69,25 @@ namespace IdeoInterview.Controllers
             HttpContext.GetOwinContext().Authentication.SignOut();
             return RedirectToAction("login", "account");
         }
-
-        [HttpGet]
-        public ActionResult Tree()
+        
+        [Authorize(Roles = "User, Admin")]
+        public ActionResult DefaultTree()
         {
             return View();
         }
+           
+
+        [Authorize(Roles = "Admin,User")]
+        [HttpGet]
+        public ActionResult Tree()
+        {
+            if (!User.IsInRole("Admin"))
+            {
+                return View("defaultTree");
+            }
+            return View();
+        }
+
         [HttpGet]
         public ActionResult Nodes()
         {
@@ -95,7 +110,7 @@ namespace IdeoInterview.Controllers
 
             return Json(lastId, JsonRequestBehavior.AllowGet);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public JsonResult AddFolder(string name, string parent, string type)
         {
@@ -114,6 +129,7 @@ namespace IdeoInterview.Controllers
             _context.SaveChanges();
             return Json(JsonRequestBehavior.AllowGet);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public JsonResult AddForm(string name, string parent, string type)
         {
@@ -135,6 +151,7 @@ namespace IdeoInterview.Controllers
             return Json(JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public JsonResult DeleteNode(int[] ids)
         {
@@ -157,6 +174,7 @@ namespace IdeoInterview.Controllers
             return Json(JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public JsonResult MoveNode(int id, string parentId)
         {
@@ -183,6 +201,7 @@ namespace IdeoInterview.Controllers
             return Json(ids.ToArray(), JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult EditForm(int FormId)
         {
@@ -192,7 +211,7 @@ namespace IdeoInterview.Controllers
             return View(model);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EditForm(FormViewModel model)
         {

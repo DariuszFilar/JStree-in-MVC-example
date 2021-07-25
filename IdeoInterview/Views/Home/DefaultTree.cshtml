@@ -1,0 +1,39 @@
+﻿@model IdeoInterview.ViewModels.FormViewModel
+
+<div class="row" style="padding-top: 20px">
+    <div id="jstree"></div>
+</div>
+
+<script>
+
+
+    $(function () {
+
+        var data = {
+            'url': '/Home/Nodes',
+            'data': function (node) {
+                return { 'id': node.id }
+                debugger;
+            }
+        }
+        $("#jstree").jstree({
+            "core": {
+                "check_callback": true,
+                "data": data
+            }, "types": {
+                "default": {
+                    "valid_children": ["default", "file"]
+                },
+                "file": {
+                    "icon": "glyphicon glyphicon-file",
+                    "valid_children": []
+                }
+            },
+            "plugins": [
+                "state", "types",
+                "wholerow"
+            ]
+        });       
+    });
+
+</script>

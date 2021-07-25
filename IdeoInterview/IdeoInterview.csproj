@@ -274,6 +274,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\Tree.cshtml" />
     <Content Include="Views\Home\EditForm.cshtml" />
+    <Content Include="Views\Home\DefaultTree.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
