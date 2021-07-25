@@ -94,7 +94,20 @@ namespace IdeoInterview.Controllers
             var node = new List<JsTreeModel>(_context.JsTreeModel);
             return Json(node, JsonRequestBehavior.AllowGet);
         }
+        
+        [HttpGet]
+        public ActionResult GetForm()
+        {
+            return PartialView("_Form");
+        }
+        [HttpPost]
+        public ActionResult GetForm(string formId)
+        {
+            var form = _context.Form.FirstOrDefault(x => x.id.ToString() == formId);
 
+            FormViewModel model = new FormViewModel(form);
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpGet]
         public ActionResult GetLastNodeId()

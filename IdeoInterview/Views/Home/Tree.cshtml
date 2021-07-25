@@ -1,4 +1,25 @@
-﻿@model IdeoInterview.ViewModels.FormViewModel
+﻿@using IdeoInterview.Models
+@model IdeoInterview.ViewModels.FormViewModel
+
+<style>
+       
+      h1 {
+      margin: 0 0 20px;
+      font-weight: 400;
+      color: #1c87c9;
+      text-align: center;
+      }
+    .formTest {
+        text-align: center;
+        padding: 25px;
+        margin: 25px;
+        box-shadow: 0 2px 5px #f5f5f5;
+        background: #f5f5f5;
+        border-style: solid;
+        position: relative;
+        outline: none;
+    }          
+</style>
 
 <div class="row" style="padding-top: 20px">
     <div id="jstree"></div>
@@ -16,6 +37,23 @@
     <button class="btn btn-danger" id="delateNode">Usuń</button>
 </div>
 
+
+<div id="title"></div>
+<div id="question"></div>
+<div id="answer"></div>
+
+<div class="main-block">
+    <form class="formTest">
+        <h2>Tytuł:</h2>
+        <h1 id="formTitle"></h1>
+        <h2>Pytanie:</h2>
+        <h1 id="formQuestion"></h1>
+        <h2>Odpowiedź:</h2>
+        <h1 id="formAnswer"></h1>
+    </form>
+</div>
+
+
 <script>
 
 
@@ -27,13 +65,33 @@
                 url: "/Home/MoveNode",
                 data: { "id": data.node.id, "parentId": data.parent },
             })
-        })
+        });
+
+        $('#jstree').on("select_node.jstree", function (e, data) {
+            if (data.node.type == "file") {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/GetForm",
+                    data: { "formId": data.node.id },
+                })
+                    .success(function (model) {
+                        if (model.Title != null) {
+                            $("#formTitle").text(model.Title);
+                        }
+                        if (model.Question != null) {
+                            $("#formQuestion").text(model.Question);
+                        } else { $("#formQuestion").text("Brak pytania"); }
+                        if (model.Answer != null) {
+                            $("#formAnswer").text(model.Answer);
+                        } else { $("#formAnswer").text("Brak odpowiedzi"); }
+                    });
+            }
+        });
 
         var data = {
             'url': '/Home/Nodes',
             'data': function (node) {
                 return { 'id': node.id }
-                debugger;
             }
         }
         $("#jstree").jstree({
@@ -56,7 +114,6 @@
         });
 
         var idsToRemove = [];
-
         function sendDeleteRequest() {
             idsToRemove.forEach((id) => $("#jstree").jstree().delete_node(id));
             $.ajax({
@@ -64,39 +121,29 @@
                 url: "/Home/DeleteNode",
                 data: { "ids": idsToRemove },
             });
-
             idsToRemove = [];
             return;
         }
-
         function recursivelyRemoveChildren(jsTree, childId) {
             var node = jsTree.get_node(childId);
-
             if (node.children.length) {
                 node.children.forEach((grandChildId) => recursivelyRemoveChildren(jsTree, grandChildId));
             }
-
             idsToRemove.push(childId);
-            return console.log(`Dodaje ID ${childId} do usuniecia`);
         }
 
         $("#delateNode").click(function () {
             var jsTree = $("#jstree").jstree();
             var nodeToDelete = (jsTree.get_selected(true))[0];
-
             if (!nodeToDelete) {
                 return;
             }
-
             idsToRemove.push(nodeToDelete.id);
-
             if (!nodeToDelete.children.length) {
                 sendDeleteRequest();
                 return;
             }
-
             nodeToDelete.children.forEach((child) => recursivelyRemoveChildren(jsTree, child));
-
             sendDeleteRequest();
         });
 
@@ -104,7 +151,6 @@
         $('#btnCreateFolder').click(function () {
             var parent = null;
             var temp = $("#jstree").jstree("get_selected")[0];
-
             var tempLastId = 0
             if (temp) {
                 parent = temp;
@@ -131,9 +177,9 @@
                 }
             })
                 .then(() => {
-                    var name = $("#inputFolderName").val();
+                 var name = $("#inputFolderName").val();
                     $.ajax({
-                        type: "POST",
+                 type: "POST",
                         url: "/Home/AddFolder",
                         data: { "name": name, "parent": parent, "type": "default" },
                     })
@@ -145,7 +191,6 @@
 
         $('#editNode').click(function () {
             var selectedNode = $("#jstree").jstree("get_selected")[0];
-
             $.ajax({
                 type: "GET",
                 async: true,
@@ -164,7 +209,6 @@
         $('#btnCreateForm').click(function () {
             var parent = null;
             var temp = $("#jstree").jstree("get_selected")[0];
-
             var tempLastId = 0;
             if (temp) {
                 parent = temp;

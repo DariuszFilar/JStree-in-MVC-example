@@ -275,6 +275,7 @@
     <Content Include="Views\Home\Tree.cshtml" />
     <Content Include="Views\Home\EditForm.cshtml" />
     <Content Include="Views\Home\DefaultTree.cshtml" />
+    <Content Include="Views\Home\_Form.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
