@@ -2,14 +2,14 @@
 @model IdeoInterview.ViewModels.FormViewModel
 
 <style>
-       
-      h1 {
-      margin: 0 0 20px;
-      font-weight: 400;
-      color: #1c87c9;
-      text-align: center;
-      }
-    .formTest {
+    h1 {
+        margin: 0 0 20px;
+        font-weight: 400;
+        color: #1c87c9;
+        text-align: center;
+    }
+
+    .formHolder {
         text-align: center;
         padding: 25px;
         margin: 25px;
@@ -18,7 +18,7 @@
         border-style: solid;
         position: relative;
         outline: none;
-    }          
+    }
 </style>
 
 <div class="row" style="padding-top: 20px">
@@ -43,7 +43,7 @@
 <div id="answer"></div>
 
 <div class="main-block">
-    <form class="formTest">
+    <form class="formHolder">
         <h2>Tytuł:</h2>
         <h1 id="formTitle"></h1>
         <h2>Pytanie:</h2>
@@ -55,10 +55,7 @@
 
 
 <script>
-
-
     $(function () {
-
         $("#jstree").jstree("#jstree").bind("move_node.jstree", function (e, data) {
             $.ajax({
                 type: "GET",
@@ -94,6 +91,7 @@
                 return { 'id': node.id }
             }
         }
+
         $("#jstree").jstree({
             "core": {
                 "check_callback": true,
@@ -114,6 +112,7 @@
         });
 
         var idsToRemove = [];
+
         function sendDeleteRequest() {
             idsToRemove.forEach((id) => $("#jstree").jstree().delete_node(id));
             $.ajax({
@@ -147,7 +146,6 @@
             sendDeleteRequest();
         });
 
-
         $('#btnCreateFolder').click(function () {
             var parent = null;
             var temp = $("#jstree").jstree("get_selected")[0];
@@ -155,7 +153,6 @@
             if (temp) {
                 parent = temp;
             }
-
             $.ajax({
                 type: "GET",
                 async: true,
@@ -213,7 +210,6 @@
             if (temp) {
                 parent = temp;
             }
-
             $.ajax({
                 type: "GET",
                 async: true,
@@ -246,5 +242,4 @@
                 });
         });
     });
-
 </script>

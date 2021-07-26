@@ -74,8 +74,7 @@ namespace IdeoInterview.Controllers
         public ActionResult DefaultTree()
         {
             return View();
-        }
-           
+        }           
 
         [Authorize(Roles = "Admin,User")]
         [HttpGet]
@@ -100,12 +99,13 @@ namespace IdeoInterview.Controllers
         {
             return PartialView("_Form");
         }
+
         [HttpPost]
         public ActionResult GetForm(string formId)
         {
             var form = _context.Form.FirstOrDefault(x => x.id.ToString() == formId);
-
             FormViewModel model = new FormViewModel(form);
+
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -123,6 +123,7 @@ namespace IdeoInterview.Controllers
 
             return Json(lastId, JsonRequestBehavior.AllowGet);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public JsonResult AddFolder(string name, string parent, string type)
@@ -140,8 +141,10 @@ namespace IdeoInterview.Controllers
 
             }
             _context.SaveChanges();
+
             return Json(JsonRequestBehavior.AllowGet);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public JsonResult AddForm(string name, string parent, string type)
@@ -159,8 +162,8 @@ namespace IdeoInterview.Controllers
                 Form form = new Form { Title = name };
                 _context.Form.Add(form);
             }
-
             _context.SaveChanges();
+
             return Json(JsonRequestBehavior.AllowGet);
         }
 
@@ -178,12 +181,11 @@ namespace IdeoInterview.Controllers
                     {
                         _context.Form.Remove(_context.Form.FirstOrDefault(x => x.id == id));
                     }
-
                     _context.JsTreeModel.Remove(idToRemove);
-
                 }
                 _context.SaveChanges();
             }
+
             return Json(JsonRequestBehavior.AllowGet);
         }
 
