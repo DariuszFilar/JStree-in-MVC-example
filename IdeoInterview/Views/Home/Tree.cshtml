@@ -147,43 +147,48 @@
         });
 
         $('#btnCreateFolder').click(function () {
-            var parent = null;
-            var temp = $("#jstree").jstree("get_selected")[0];
-            var tempLastId = 0
-            if (temp) {
-                parent = temp;
-            }
-            $.ajax({
-                type: "GET",
-                async: true,
-                url: "/Home/GetLastNodeId",
-                contentType: "application/json",
-                context: this,
-                success: function (lastId) {
-                    tempLastId = lastId;
-                    $('#jstree').jstree().create_node(parent, {
-                        "id": ++lastId,
-                        "text": inputFolderName.value, "type": "default"
-                    }, "last")
-                    if (lastId == 1) {
-                        $("#jstree").jstree().refresh();
-                    }
-                },
-                error: function (error) {
-                    console.log(error);
+            if (inputFolderName.value.length >= 3 && inputFolderName.value.length < 12) {
+                var parent = null;
+                var temp = $("#jstree").jstree("get_selected")[0];
+                var tempLastId = 0
+                if (temp) {
+                    parent = temp;
                 }
-            })
-                .then(() => {
-                 var name = $("#inputFolderName").val();
-                    $.ajax({
-                 type: "POST",
-                        url: "/Home/AddFolder",
-                        data: { "name": name, "parent": parent, "type": "default" },
-                    })
-                    if (tempLastId == 0 || tempLastId == 1) {
-                        $("#jstree").jstree().refresh();
+                $.ajax({
+                    type: "GET",
+                    async: true,
+                    url: "/Home/GetLastNodeId",
+                    contentType: "application/json",
+                    context: this,
+                    success: function (lastId) {
+                        tempLastId = lastId;
+                        $('#jstree').jstree().create_node(parent, {
+                            "id": ++lastId,
+                            "text": inputFolderName.value, "type": "default"
+                        }, "last")
+                        if (lastId == 1) {
+                            $("#jstree").jstree().refresh();
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
                     }
-                });
+                })
+                    .then(() => {
+                        var name = $("#inputFolderName").val();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Home/AddFolder",
+                            data: { "name": name, "parent": parent, "type": "default" },
+                        })
+                        if (tempLastId == 0 || tempLastId == 1) {
+                            $("#jstree").jstree().refresh();
+                        }
+                    });
+            }
+            else {
+                alert("Nazwa musi zawierać od 3 do 12 znaków");
+            }
         });
 
         $('#editNode').click(function () {
@@ -204,42 +209,47 @@
         });
 
         $('#btnCreateForm').click(function () {
-            var parent = null;
-            var temp = $("#jstree").jstree("get_selected")[0];
-            var tempLastId = 0;
-            if (temp) {
-                parent = temp;
+            if (inputFormName.value.length >= 3 && inputFormName.value.length < 12) {
+                var parent = null;
+                var temp = $("#jstree").jstree("get_selected")[0];
+                var tempLastId = 0;
+                if (temp) {
+                    parent = temp;
+                }
+                $.ajax({
+                    type: "GET",
+                    async: true,
+                    url: "/Home/GetLastNodeId",
+                    contentType: "application/json",
+                    context: this,
+                    success: function (lastId) {
+                        if (lastId == 0 || !temp) {
+                        }
+                        else {
+                            tempLastId = lastId;
+                            $('#jstree').jstree().create_node(parent, {
+                                "id": ++lastId,
+                                "text": inputFormName.value, "type": "file"
+                            }, "last")
+                        };
+                    },
+                    error: function (error) {
+                    },
+                })
+                    .then(() => {
+                        var name = $("#inputFormName").val();
+                        if (tempLastId != 1) {
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/AddForm",
+                                data: { "name": name, "parent": parent, "type": "file" },
+                            })
+                        }
+                    });
             }
-            $.ajax({
-                type: "GET",
-                async: true,
-                url: "/Home/GetLastNodeId",
-                contentType: "application/json",
-                context: this,
-                success: function (lastId) {
-                    if (lastId == 0 || !temp) {
-                    }
-                    else {
-                        tempLastId = lastId;
-                        $('#jstree').jstree().create_node(parent, {
-                            "id": ++lastId,
-                            "text": inputFormName.value, "type": "file"
-                        }, "last")
-                    };
-                },
-                error: function (error) {
-                },
-            })
-                .then(() => {
-                    var name = $("#inputFormName").val();
-                    if (tempLastId != 1) {
-                        $.ajax({
-                            type: "POST",
-                            url: "/Home/AddForm",
-                            data: { "name": name, "parent": parent, "type": "file" },
-                        })
-                    }
-                });
+            else {
+                alert("Nazwa musi zawierać od 3 do 12 znaków");
+            }
         });
     });
 </script>

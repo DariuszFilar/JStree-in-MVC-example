@@ -8,6 +8,7 @@
     <div>
         @Html.TextBoxFor(m => m.Title, new { placeholder = "tytuł", @class = "form-control", style = "float:none!important; display:inline-block;" })
     </div>
+    @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger; display:inline-block" })
     <div>Tutaj wpisz pytanie:</div>
     <div>
         @Html.TextBoxFor(m => m.Question, new { placeholder = "pytanie", @class = "form-control", style = "float:none!important; display:inline-block;" })

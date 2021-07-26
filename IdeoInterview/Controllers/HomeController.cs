@@ -230,15 +230,18 @@ namespace IdeoInterview.Controllers
         [HttpPost]
         public ActionResult EditForm(FormViewModel model)
         {
-            var node = _context.Form.FirstOrDefault(x => x.id == model.id);
-            node.Title = model.Title;
-            node.Question = model.Question;
-            node.Answer = model.Answer;
+            if (model.Title.Length >= 3 && model.Title.Length <= 12)
+            {
+                var node = _context.Form.FirstOrDefault(x => x.id == model.id);
+                node.Title = model.Title;
+                node.Question = model.Question;
+                node.Answer = model.Answer;
 
-            var folder = _context.JsTreeModel.FirstOrDefault(x => x.id == model.id);
-            folder.text = model.Title;
+                var folder = _context.JsTreeModel.FirstOrDefault(x => x.id == model.id);
+                folder.text = model.Title;
 
-            _context.SaveChanges();
+                _context.SaveChanges();
+            }
             return View();
         }
     }
